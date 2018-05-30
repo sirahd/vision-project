@@ -6,7 +6,7 @@ import models
 import torch
 import pdb
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def train(net, dataloader, optimizer, criterion, epoch):
 
@@ -16,7 +16,7 @@ def train(net, dataloader, optimizer, criterion, epoch):
     for i, data in enumerate(dataloader.trainloader, 0):
         # get the inputs
         inputs, labels = data
-        inputs, labels = inputs.to(device), labels.to(device)
+        #inputs, labels = inputs.to(device), labels.to(device)
 
         # zero the parameter gradients
         optimizer.zero_grad()
@@ -49,7 +49,7 @@ def test(net, dataloader, tag=''):
     with torch.no_grad():
         for data in dataTestLoader:
             images, labels = data
-            images, labels = images.to(device), labels.to(device)
+            #images, labels = images.to(device), labels.to(device)
             outputs = net(images)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
@@ -63,7 +63,7 @@ def test(net, dataloader, tag=''):
     with torch.no_grad():
         for data in dataTestLoader:
             images, labels = data
-            images, labels = images.to(device), labels.to(device)
+            #images, labels = images.to(device), labels.to(device)
             outputs = net(images)
             _, predicted = torch.max(outputs, 1)
             c = (predicted == labels).squeeze()
@@ -83,7 +83,7 @@ def main():
 
     loader = FaceLoader(args)
     net = args.model()
-    net.to(device)
+    #net.to(device)
     print('The log is recorded in ')
     print(net.logFile.name)
 
