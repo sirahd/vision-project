@@ -48,7 +48,7 @@ class FaceLoader(object):
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
 
-        trainset = FaceDataset('dev_labels.csv', './data', transform)
+        trainset = FaceDataset('train_labels.csv', './data', transform)
         self.trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batchSize,
                                                   shuffle=True)
 

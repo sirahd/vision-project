@@ -23,16 +23,16 @@ def train(net, dataloader, optimizer, criterion, epoch):
 
         # forward + backward + optimize
         outputs = net(inputs)
-        print(outputs, labels)
+        outputs = outputs.view(-1)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
 
         # print statistics
         running_loss += loss.item()
-        if (i + 1) % 2000 == 0:    # print every 2000 mini-batches
+        if (i + 1) % 50 == 0:    # print every 2000 mini-batches
             net.log('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / 2000))
+                  (epoch + 1, i + 1, running_loss / 50))
             total_loss += running_loss
             running_loss = 0.0
 
@@ -93,9 +93,9 @@ def main():
     for epoch in range(args.epochs):  # loop over the dataset multiple times
         net.adjust_learning_rate(optimizer, epoch, args)
         train(net, loader, optimizer, criterion, epoch)
-        if epoch % 1 == 0: # Comment out this part if you want a faster training
-            test(net, loader, 'Train')
-            test(net, loader, 'Test')
+        #if epoch % 1 == 0: # Comment out this part if you want a faster training
+            #test(net, loader, 'Train')
+            #test(net, loader, 'Test')
 
     print('The log is recorded in ')
     print(net.logFile.name)

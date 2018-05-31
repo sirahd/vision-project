@@ -53,7 +53,6 @@ class LazyNet(BaseModel):
         # TODO: Implement forward pass for LazyNet
         x = self.fc1(x.view(-1, num_flat_features(x)))
         y = self.out_act(x)
-        print(y.shape)
         return y
 
 class BoringNet(BaseModel):
