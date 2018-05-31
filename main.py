@@ -6,8 +6,6 @@ import models
 import torch
 import pdb
 
-#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
 def train(net, dataloader, optimizer, criterion, epoch):
 
     running_loss = 0.0
@@ -49,7 +47,6 @@ def test(net, dataloader, tag=''):
     with torch.no_grad():
         for data in dataTestLoader:
             images, labels = data
-            #images, labels = images.to(device), labels.to(device)
             outputs = net(images)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
@@ -72,7 +69,6 @@ def test(net, dataloader, tag=''):
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
 
-
     for i in range(2):
         net.log('%s Accuracy of %5s : %2d %%' % (
             tag, dataloader.classes[i], 100 * class_correct[i] / class_total[i]))
@@ -83,7 +79,6 @@ def main():
 
     loader = FaceLoader(args)
     net = args.model()
-    #net.to(device)
     print('The log is recorded in ')
     print(net.logFile.name)
 

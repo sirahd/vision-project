@@ -32,28 +32,23 @@ class BaseModel(nn.Module):
         return nn.BCELoss()
 
     def optimizer(self):
-        return optim.SGD(self.parameters(), lr=0.001)
+        return optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
 
     def adjust_learning_rate(self, optimizer, epoch, args):
         lr = args.lr  # TODO: Implement decreasing learning rate's rules
-        lr *= 0.9 ** (epoch // 50)
         for param_group in optimizer.param_groups:
             param_group['lr'] = lr
-
-
 
 class LazyNet(BaseModel):
     def __init__(self):
         super(LazyNet, self).__init__()
         # TODO: Define model here
         self.fc1 = nn.Linear(256 * 256 * 3, 1)
-        self.out_act = nn.Sigmoid()
 
     def forward(self, x):
         # TODO: Implement forward pass for LazyNet
         x = self.fc1(x.view(-1, num_flat_features(x)))
-        y = self.out_act(x)
-        return y
+        return x
 
 class BoringNet(BaseModel):
     def __init__(self):

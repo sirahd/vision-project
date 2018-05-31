@@ -22,12 +22,12 @@ class FaceDataset(Dataset):
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir, self.labels.iloc[idx, 0])
         image = io.imread(img_name)
-        image = torch.from_numpy(transform.resize(image, (256, 256), preserve_range=True).astype(np.float32))
+        image = transform.resize(image, (256, 256), preserve_range=True).astype(np.uint8)
         labels = torch.tensor(self.labels.iloc[idx, 1].astype(float))
 
-#        if self.transform:
-#            image = self.transform(image)
-#            image = image.float()
+        if self.transform:
+            image = self.transform(image)
+            image = image.float()
         sample = (image, labels)
         return sample
 
@@ -39,8 +39,8 @@ class FaceLoader(object):
              # TODO: Add data augmentations here
 #             transforms.RandomHorizontalFlip(),
 #             transforms.RandomRotation(20),
-             transforms.ToTensor(),
-             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+             transforms.ToTensor()
+             #transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
              ])
 
         transform_test = transforms.Compose([
