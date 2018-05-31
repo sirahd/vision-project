@@ -8,6 +8,13 @@ import time
 import torchvision.models as torchmodels
 from torch.autograd import Variable
 
+def num_flat_features(x):
+    size = x.size()[1:]  # all dimensions except the batch dimension
+    num_features = 1
+    for s in size:
+        num_features *= s
+    return num_features
+
 class BaseModel(nn.Module):
     def __init__(self):
         super(BaseModel, self).__init__()
@@ -22,7 +29,7 @@ class BaseModel(nn.Module):
         self.logFile.write(str + '\n')
 
     def criterion(self):
-        return nn.CrossEntropyLoss()
+        return nn.BCELoss()
 
     def optimizer(self):
         return optim.SGD(self.parameters(), lr=0.001)
@@ -39,15 +46,15 @@ class LazyNet(BaseModel):
     def __init__(self):
         super(LazyNet, self).__init__()
         # TODO: Define model here
-        self.fc1 = nn.Linear(256 * 256 * 3, 2)
+        self.fc1 = nn.Linear(256 * 256 * 3, 1)
+        self.out_act = nn.Sigmoid()
 
     def forward(self, x):
         # TODO: Implement forward pass for LazyNet
-        x = x.view(-1, 256 * 256 * 3)
-        print(x)
-        x = F.relu(self.fc1(x))
-        return x
-
+        x = self.fc1(x.view(-1, num_flat_features(x)))
+        y = self.out_act(x)
+        print(y.shape)
+        return y
 
 class BoringNet(BaseModel):
     def __init__(self):
@@ -82,15 +89,8 @@ class CoolNet(BaseModel):
         # TODO: Implement forward pass for CoolNet
         x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
         x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-        x = x.view(-1, self.num_flat_features(x))
+        x = x.view(-1, num_flat_features(x))
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
-
-    def num_flat_features(self, x):
-        size = x.size()[1:]  # all dimensions except the batch dimension
-        num_features = 1
-        for s in size:
-            num_features *= s
-        return num_features

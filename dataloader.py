@@ -5,6 +5,7 @@ import pandas as pd
 from skimage import io, transform
 import numpy as np
 import matplotlib.pyplot as plt
+import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
 
@@ -21,13 +22,12 @@ class FaceDataset(Dataset):
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir, self.labels.iloc[idx, 0])
         image = io.imread(img_name)
-        image = transform.resize(image, (256, 256), preserve_range=True)
-        labels = self.labels.iloc[idx, 1]
+        image = torch.from_numpy(transform.resize(image, (256, 256), preserve_range=True).astype(np.float32))
+        labels = torch.tensor(self.labels.iloc[idx, 1].astype(float))
 
-        if self.transform:
-            print('before', image)
-            image = self.transform(image)
-            print('after', image)
+#        if self.transform:
+#            image = self.transform(image)
+#            image = image.float()
         sample = (image, labels)
         return sample
 
@@ -53,9 +53,10 @@ class FaceLoader(object):
                                                   shuffle=True)
 
         devset = FaceDataset('dev_labels.csv', './data', transform_test)
-        self.devloader = torch.utils.data.DataLoader(trainset, batch_size=args.batchSize,
+        self.devloader = torch.utils.data.DataLoader(devset, batch_size=args.batchSize,
                                                   shuffle=True, num_workers=1)
 
         testset = FaceDataset('test_labels.csv', './data', transform_test)
         self.testloader = torch.utils.data.DataLoader(testset, batch_size=args.batchSize,
                                                  shuffle=False, num_workers=1)
+        self.classes = ['Male', 'Female']

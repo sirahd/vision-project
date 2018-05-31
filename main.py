@@ -23,6 +23,7 @@ def train(net, dataloader, optimizer, criterion, epoch):
 
         # forward + backward + optimize
         outputs = net(inputs)
+        print(outputs, labels)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
@@ -37,7 +38,6 @@ def train(net, dataloader, optimizer, criterion, epoch):
 
     net.log('Final Summary:   loss: %.3f' %
           (total_loss / i))
-
 
 def test(net, dataloader, tag=''):
     correct = 0
@@ -58,8 +58,8 @@ def test(net, dataloader, tag=''):
     net.log('%s Accuracy of the network: %d %%' % (tag,
         100 * correct / total))
 
-    class_correct = list(0. for i in range(10))
-    class_total = list(0. for i in range(10))
+    class_correct = list(0. for i in range(2))
+    class_total = list(0. for i in range(2))
     with torch.no_grad():
         for data in dataTestLoader:
             images, labels = data
@@ -67,13 +67,13 @@ def test(net, dataloader, tag=''):
             outputs = net(images)
             _, predicted = torch.max(outputs, 1)
             c = (predicted == labels).squeeze()
-            for i in range(4):
+            for i in range(2):
                 label = labels[i]
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
 
 
-    for i in range(10):
+    for i in range(2):
         net.log('%s Accuracy of %5s : %2d %%' % (
             tag, dataloader.classes[i], 100 * class_correct[i] / class_total[i]))
 
