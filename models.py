@@ -29,7 +29,7 @@ class BaseModel(nn.Module):
         self.logFile.write(str + '\n')
 
     def criterion(self):
-        return nn.BCELoss()
+        return nn.BCEWithLogitsLoss()
 
     def optimizer(self):
         return optim.SGD(self.parameters(), lr=0.001, momentum=0.9)
