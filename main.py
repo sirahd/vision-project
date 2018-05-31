@@ -43,18 +43,34 @@ def test(net, dataloader, tag=''):
     if tag == 'Train':
         dataTestLoader = dataloader.trainloader
     else:
-        dataTestLoader = dataloader.testloader
+        dataTestLoader = dataloader.devloader
     with torch.no_grad():
         for data in dataTestLoader:
             images, labels = data
             outputs = net(images)
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
+            outputs = outputs.view(-1)
+
+            itr = 0
+            for i in outputs:
+                #print (i)
+                predicted = -1.0
+                if i >= 0.0:
+                    predicted = 1.0
+                else:
+                    predicted = 0.0
+                correct += (predicted == labels[itr].item())
+                itr += 1
+
+            #print (outputs.data)
+            #print (labels)
+            total += len(labels)
+            #print (correct)
+            #print (total)
 
     net.log('%s Accuracy of the network: %d %%' % (tag,
         100 * correct / total))
 
+    """
     class_correct = list(0. for i in range(2))
     class_total = list(0. for i in range(2))
     with torch.no_grad():
@@ -72,6 +88,7 @@ def test(net, dataloader, tag=''):
     for i in range(2):
         net.log('%s Accuracy of %5s : %2d %%' % (
             tag, dataloader.classes[i], 100 * class_correct[i] / class_total[i]))
+    """
 
 def main():
 
@@ -88,9 +105,9 @@ def main():
     for epoch in range(args.epochs):  # loop over the dataset multiple times
         net.adjust_learning_rate(optimizer, epoch, args)
         train(net, loader, optimizer, criterion, epoch)
-        #if epoch % 1 == 0: # Comment out this part if you want a faster training
-            #test(net, loader, 'Train')
-            #test(net, loader, 'Test')
+        if epoch % 1 == 0: # Comment out this part if you want a faster training
+            test(net, loader, 'Train')
+            test(net, loader, 'Test')
 
     print('The log is recorded in ')
     print(net.logFile.name)

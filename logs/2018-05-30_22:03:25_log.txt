@@ -1,0 +1,3 @@
+[1,    50] loss: 0.632
+[1,   100] loss: 0.545
+Final Summary:   loss: 0.535
