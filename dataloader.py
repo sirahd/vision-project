@@ -60,9 +60,9 @@ class FaceLoader(object):
 
         devset = FaceDataset('dev_labels.csv', './resized', transform_test)
         self.devloader = torch.utils.data.DataLoader(devset, batch_size=args.batchSize,
-                                                  shuffle=True, num_workers=0)
+                                                  shuffle=True)
 
         testset = FaceDataset('test_labels.csv', './resized', transform_test)
         self.testloader = torch.utils.data.DataLoader(testset, batch_size=args.batchSize,
-                                                 shuffle=False, num_workers=0)
+                                                 shuffle=False)
         self.classes = ['Male', 'Female']
