@@ -81,7 +81,7 @@ class CoolNet(BaseModel):
 
     def forward(self, x):
         # TODO: Implement forward pass for CoolNet
-        a = F.max_pool2d(F.relu(self.conv1(x)), 2))
+        a = F.max_pool2d(F.relu(self.conv1(x)), 2)
         b = F.max_pool2d(F.relu(self.conv2(a)), 2)
         c = b.view(-1, num_flat_features(b))
         d = F.relu(self.fc1(c))

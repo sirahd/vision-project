@@ -35,11 +35,16 @@ class FaceDataset(Dataset):
 class FaceLoader(object):
     def __init__(self, args):
         super(FaceLoader, self).__init__()
+        torch_transforms = [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomRotation(10)
+            ]
         transform = transforms.Compose(
             [
              # TODO: Add data augmentations here
-#             transforms.RandomHorizontalFlip(),
-#             transforms.RandomRotation(20),
+             transforms.ToPILImage(),
+             transforms.RandomChoice(torch_transforms),
+             transforms.ColorJitter(0.2, 0.2, 0.2, 0.1),
              transforms.ToTensor(),
              transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
              ])
