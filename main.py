@@ -5,6 +5,9 @@ import numpy as np
 import models
 import torch
 import pdb
+import warnings
+
+warnings.filterwarnings("ignore")
 
 def train(net, dataloader, optimizer, criterion, epoch):
 
@@ -30,7 +33,7 @@ def train(net, dataloader, optimizer, criterion, epoch):
         running_loss += loss.item()
         if (i + 1) % 50 == 0:    # print every 2000 mini-batches
             net.log('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / 50))
+                  (epoch + 1, i + 1, running_loss / 100))
             total_loss += running_loss
             running_loss = 0.0
 

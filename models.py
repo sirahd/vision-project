@@ -71,20 +71,20 @@ class CoolNet(BaseModel):
     def __init__(self):
         super(CoolNet, self).__init__()
         # TODO: Define model here
-        self.conv1 = nn.Conv2d(3, 6, 5)
-        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.conv1 = nn.Conv2d(3, 6, 11, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5, 2)
         # an affine operation: y = Wx + b
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
+        self.fc1 = nn.Linear(3136, 120)
         self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+        self.fc3 = nn.Linear(84, 1)
 
 
     def forward(self, x):
         # TODO: Implement forward pass for CoolNet
-        x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
-        x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-        x = x.view(-1, num_flat_features(x))
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+        a = F.max_pool2d(F.relu(self.conv1(x)), 2))
+        b = F.max_pool2d(F.relu(self.conv2(a)), 2)
+        c = b.view(-1, num_flat_features(b))
+        d = F.relu(self.fc1(c))
+        e = F.relu(self.fc2(d))
+        f = self.fc3(e)
+        return f
