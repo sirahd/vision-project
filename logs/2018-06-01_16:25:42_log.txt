@@ -1,0 +1,10 @@
+[1,    50] loss: 0.806
+[1,   100] loss: 0.515
+Final Summary:   loss: 0.600
+Train Accuracy of the network: 44 %
+Test Accuracy of the network: 64 %
+[2,    50] loss: 0.729
+[2,   100] loss: 0.670
+Final Summary:   loss: 0.636
+Train Accuracy of the network: 69 %
+Test Accuracy of the network: 67 %
