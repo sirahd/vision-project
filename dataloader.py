@@ -22,7 +22,8 @@ class FaceDataset(Dataset):
     def __getitem__(self, idx):
         img_name = os.path.join(self.root_dir, self.labels.iloc[idx, 0])
         image = io.imread(img_name)
-        image = transform.resize(image, (256, 256), preserve_range=True).astype(np.uint8)
+        #image = transform.resize(image, (256, 256), preserve_range=True).astype(np.uint8)
+        image = image.astype(np.uint8)
         labels = torch.tensor(self.labels.iloc[idx, 1].astype(float))
 
         if self.transform:
@@ -48,15 +49,15 @@ class FaceLoader(object):
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
 
-        trainset = FaceDataset('train_labels.csv', './data', transform)
+        trainset = FaceDataset('train_labels.csv', './resized', transform)
         self.trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batchSize,
                                                   shuffle=True)
 
-        devset = FaceDataset('dev_labels.csv', './data', transform_test)
+        devset = FaceDataset('dev_labels.csv', './resized', transform_test)
         self.devloader = torch.utils.data.DataLoader(devset, batch_size=args.batchSize,
                                                   shuffle=True, num_workers=1)
 
-        testset = FaceDataset('test_labels.csv', './data', transform_test)
+        testset = FaceDataset('test_labels.csv', './resized', transform_test)
         self.testloader = torch.utils.data.DataLoader(testset, batch_size=args.batchSize,
                                                  shuffle=False, num_workers=1)
         self.classes = ['Male', 'Female']
