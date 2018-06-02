@@ -6,6 +6,7 @@ import models
 import torch
 import pdb
 import warnings
+import os
 
 warnings.filterwarnings("ignore")
 
@@ -112,8 +113,13 @@ def main():
             test(net, loader, 'Train')
             test(net, loader, 'Test')
 
+    model_path = os.path.join('model', net.__class__.__name__)
+    torch.save(net.state_dict(), model_path)
+
     print('The log is recorded in ')
     print(net.logFile.name)
+    print('The model is saved in {}'.format(model_path))
+    print(model_path)
 
 if __name__ == '__main__':
     main()

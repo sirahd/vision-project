@@ -81,10 +81,48 @@ class CoolNet(BaseModel):
 
     def forward(self, x):
         # TODO: Implement forward pass for CoolNet
-        a = F.max_pool2d(F.relu(self.conv1(x)), 2))
+        a = F.max_pool2d(F.relu(self.conv1(x)), 2)
         b = F.max_pool2d(F.relu(self.conv2(a)), 2)
         c = b.view(-1, num_flat_features(b))
         d = F.relu(self.fc1(c))
         e = F.relu(self.fc2(d))
         f = self.fc3(e)
         return f
+
+class VGG(BaseModel):
+    def __init__(self):
+        super(VGG, self).__init__()
+        # TODO: Define model here
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 8 * 8, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Dropout(),
+            nn.Linear(4096, 1),
+        )
+        self.features = self.make_layers(True)
+
+    def make_layers(self, batch_norm=False):
+        layers = []
+        in_channels = 3
+        for v in [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M']:
+            if v == 'M':
+                layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
+            else:
+                conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
+                if batch_norm:
+                    layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
+                else:
+                    layers += [conv2d, nn.ReLU(inplace=True)]
+                in_channels = v
+        return nn.Sequential(*layers)
+
+
+    def forward(self, x):
+        # TODO: Implement forward pass for CoolNet
+        x = self.features(x)
+        x = x.view(x.size(0), -1)
+        x = self.classifier(x)
+        return x
