@@ -9,6 +9,7 @@ import warnings
 import os
 
 warnings.filterwarnings("ignore")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def train(net, dataloader, optimizer, criterion, epoch):
 
@@ -18,7 +19,7 @@ def train(net, dataloader, optimizer, criterion, epoch):
     for i, data in enumerate(dataloader.trainloader, 0):
         # get the inputs
         inputs, labels = data
-        #inputs, labels = inputs.to(device), labels.to(device)
+        inputs, labels = inputs.to(device), labels.to(device)
 
         # zero the parameter gradients
         optimizer.zero_grad()
@@ -51,6 +52,7 @@ def test(net, dataloader, tag=''):
     with torch.no_grad():
         for data in dataTestLoader:
             images, labels = data
+            images, labels = images.to(device), labels.to(device)
             outputs = net(images)
             outputs = outputs.view(-1)
 
@@ -100,6 +102,7 @@ def main():
 
     loader = FaceLoader(args)
     net = args.model()
+    net.to(device)
     print('The log is recorded in ')
     print(net.logFile.name)
 
