@@ -113,7 +113,7 @@ def main():
         net.adjust_learning_rate(optimizer, epoch, args)
         train(net, loader, optimizer, criterion, epoch)
         if epoch % 1 == 0: # Comment out this part if you want a faster training
-            test(net, loader, 'Train')
+            #test(net, loader, 'Train')
             test(net, loader, 'Test')
 
     model_path = os.path.join('model', net.__class__.__name__)
