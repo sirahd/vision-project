@@ -107,7 +107,7 @@ class VGG(BaseModel):
     def make_layers(self, batch_norm=False):
         layers = []
         in_channels = 3
-        for v in [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M']:
+        for v in [32, 'M', 64, 'M', 128, 128, 'M', 256, 256, 'M', 256, 256, 'M']:
             if v == 'M':
                 layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
             else:
