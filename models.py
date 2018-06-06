@@ -94,7 +94,7 @@ class VGG(BaseModel):
         super(VGG, self).__init__()
         # TODO: Define model here
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 8 * 8, 4096),
+            nn.Linear(256* 8 * 8, 4096),
             nn.ReLU(True),
             nn.Dropout(),
             nn.Linear(4096, 4096),
