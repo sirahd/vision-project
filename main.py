@@ -1,8 +1,5 @@
 from utils import argParser
 from dataloader import FaceLoader
-import matplotlib
-matplotlib.use('agg')
-import matplotlib.pyplot as plt
 import numpy as np
 import models
 import torch
