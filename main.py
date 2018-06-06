@@ -8,6 +8,8 @@ import pdb
 import warnings
 import os
 
+matplotlib.use('agg')
+
 warnings.filterwarnings("ignore")
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
