@@ -1,11 +1,12 @@
 import models
 import numpy as np
 import cv2
+import torch
 from torchvision import transforms
 
 def model():
-    m = models.LazyNet()
-    #m.load_state_dict(torch.load('model/CoolNet')
+    m = models.CoolNet()
+    m.load_state_dict(torch.load('model/CoolNetFinal'))
     return m
 
 def transform(im):
@@ -14,10 +15,11 @@ def transform(im):
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
-    return t(im)
+    return t(im).unsqueeze(0)
 
 def show_label(im, t, loc):
-    t = t.view(-1)
+    t = t.view(-1).item()
+    print(t)
     p = "Male" if t >= 0 else "Female"
     args = [im, p, loc, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2]
     cv2.putText(*args)
@@ -25,8 +27,8 @@ def show_label(im, t, loc):
 if __name__ == "__main__":
     cap = cv2.VideoCapture(0)
     print(cap.get(3), cap.get(4))
-    cap.set(3, 640)
-    cap.set(4, 360)
+    #cap.set(3, 640)
+    #cap.set(4, 360)
     cascPath = 'lbpcascade_frontalface.xml'
     #cascPath = 'haar.xml'
     faceCascade = cv2.CascadeClassifier(cascPath)
