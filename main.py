@@ -1,5 +1,7 @@
 from utils import argParser
 from dataloader import FaceLoader
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import models
@@ -8,7 +10,6 @@ import pdb
 import warnings
 import os
 
-matplotlib.use('agg')
 
 warnings.filterwarnings("ignore")
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
